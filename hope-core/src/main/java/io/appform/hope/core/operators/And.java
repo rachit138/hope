@@ -14,6 +14,7 @@
 
 package io.appform.hope.core.operators;
 
+import com.google.common.base.Objects;
 import io.appform.hope.core.BinaryOperator;
 import io.appform.hope.core.Visitor;
 import io.appform.hope.core.values.BooleanValue;
@@ -26,7 +27,6 @@ import lombok.ToString;
  * AND of {@link BooleanValue} params
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class And extends BinaryOperator<BooleanValue> {
 
@@ -40,5 +40,18 @@ public class And extends BinaryOperator<BooleanValue> {
         return visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) { return false; }
+        And other = (And) obj;
+        return Objects.equal(this.getLhs(), other.getLhs())
+                && Objects.equal(this.getRhs(), other.getRhs());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getLhs(), this.getRhs());
+    }
 }

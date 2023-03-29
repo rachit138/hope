@@ -14,6 +14,7 @@
 
 package io.appform.hope.core.values;
 
+import com.google.common.base.Objects;
 import io.appform.hope.core.Visitor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +24,6 @@ import lombok.ToString;
  * Represents an object. Other concrete value types can be converted to this if required.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ObjectValue extends EvaluatableValue<Object> {
 
@@ -60,4 +60,17 @@ public class ObjectValue extends EvaluatableValue<Object> {
         return visitor.visit(this);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) { return false; }
+        ObjectValue other = (ObjectValue) obj;
+        return Objects.equal(this.getValue(), other.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getValue(), this.getPathValue(), this.getPointerValue(), this.getFunction());
+    }
 }

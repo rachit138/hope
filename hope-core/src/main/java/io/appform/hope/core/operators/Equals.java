@@ -14,6 +14,7 @@
 
 package io.appform.hope.core.operators;
 
+import com.google.common.base.Objects;
 import io.appform.hope.core.BinaryOperator;
 import io.appform.hope.core.Value;
 import io.appform.hope.core.Visitor;
@@ -26,13 +27,27 @@ import lombok.ToString;
  * Checks equality of params
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class Equals extends BinaryOperator<Value> {
 
     @Builder
     public Equals(Value lhs, Value rhs) {
         super(lhs, rhs);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) { return false; }
+        if (obj == this) { return true; }
+        if (obj.getClass() != getClass()) { return false; }
+        Equals other = (Equals) obj;
+        return Objects.equal(this.getLhs(), other.getLhs())
+                && Objects.equal(this.getRhs(), other.getRhs());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(this.getLhs(), this.getRhs());
     }
 
     @Override
